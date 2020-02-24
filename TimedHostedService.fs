@@ -12,24 +12,23 @@ type TimedHostedService(_logger: ILogger<TimedHostedService>) =
 
     interface IHostedService with
         member this.StartAsync(stoppingToken: CancellationToken) =
-            "Timed Hosted Service running" |> this.Logger.LogInformation
+            "Timed Hosted Service running" |> _logger.LogInformation
             this._timer <- Some(new Timer(this.DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(5.)))
             Task.CompletedTask
 
         member this.StopAsync(stoppingToken: CancellationToken) =
-            "Timed Hosted Service is stopping" |> this.Logger.LogInformation
-            this._timer
-            |> Option.Do(fun t ->
-                (Timeout.Infinite, 0)
-                |> t.Change
-                |> ignore)
+            "Timed Hosted Service is stopping" |> _logger.LogInformation
+            match this._timer with
+            | Some(t) -> t.Change(Timeout.Infinite, 0) |> ignore
+            | None -> ignore()
             Task.CompletedTask
 
     interface IDisposable with
-        member this.Dispose() = this._timer |> Option.Do(fun t -> t.Dispose())
-
-    member this.Logger = _logger
+        member this.Dispose() =
+            match this._timer with
+            | Some(t) -> t.Dispose()
+            | None -> ignore()
 
     member this.DoWork(state: Object) =
         this.executionCount <- this.executionCount + 1
-        ("Timed Hosted Service is working. Count: {Count}", this.executionCount) |> this.Logger.LogInformation
+        ("Timed Hosted Service is working. Count: {Count}", this.executionCount) |> _logger.LogInformation

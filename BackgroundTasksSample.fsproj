@@ -6,7 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="OptionExtensions.fs" />
+        <Compile Include="ScopedProcessingService.fs" />
+        <Compile Include="ConsumeScopedServiceHostedService.fs" />
         <Compile Include="TimedHostedService.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
