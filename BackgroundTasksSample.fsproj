@@ -9,6 +9,9 @@
         <Compile Include="Services\ScopedProcessingService.fs" />
         <Compile Include="Services\ConsumeScopedServiceHostedService.fs" />
         <Compile Include="Services\TimedHostedService.fs" />
+        <Compile Include="Services\BackgroundTaskQueue.fs" />
+        <Compile Include="Services\QueuedHostedService.fs" />
+        <Compile Include="Services\MonitorLoop.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
