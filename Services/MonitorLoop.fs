@@ -4,13 +4,17 @@ open System.Threading
 open System
 open System.Threading.Tasks
 open BackgroundTasksSample.Services.BackgroundTaskQueue
+open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 
-type MonitorLoop(_logger: ILogger<MonitorLoop>, _taskQueue: IBackgroundTaskQueue, _cancellationToken: CancellationToken) =
-    member this.StartMonitorLoop() = "Monitor Loop is starting." |> _logger.LogInformation
+type MonitorLoop(_logger: ILogger<MonitorLoop>, _taskQueue: IBackgroundTaskQueue, _applicationLifetime: IHostApplicationLifetime) =
+    member val _cancellationToken = _applicationLifetime.ApplicationStopping
+    member this.StartMonitorLoop() =
+        "Monitor Loop is starting." |> _logger.LogInformation
+        Task.Run(fun () -> this.Monitor() |> ignore)
 
     member this.Monitor() =
-        while (not _cancellationToken.IsCancellationRequested) do
+        while (not this._cancellationToken.IsCancellationRequested) do
             let keyStroke = Console.ReadKey()
             match keyStroke.Key with
             | ConsoleKey.W ->
