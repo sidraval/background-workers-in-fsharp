@@ -1,6 +1,6 @@
 # .NET Core Background Workers in F#
 
-See [the blog post](https://sidraval.com/blog/background_workers_fsharp.html) for details.
+See [the blog post](https://www.sidraval.com/blog/dotnet-core-background-tasks-f-sharp) for details.
 
 ### Version info
 * .NET Core v3.1
